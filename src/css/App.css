@@ -1,0 +1,1 @@
+nav{position:relative;display:flex;justify-content:center}nav ul{display:inline-block;font-size:24px}nav ul li{display:inline-block;padding:0 20px}nav .details{border-radius:5px;padding:1em;background:white;position:absolute;transform:translate(-50%, 100%);transition:all .2s linear}nav .details:hover{opacity:1}header .hero-img{width:100%}
