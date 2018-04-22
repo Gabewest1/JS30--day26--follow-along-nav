@@ -1,8 +1,10 @@
 nav {
-    position: relative;
+    position: absolute;
+    width: 100%;
     display: flex;
     justify-content: center;
-
+    font-family: 'Open Sans', sans-serif;
+    
     ul {
         display: inline-block;
         font-size: 24px;
@@ -10,6 +12,7 @@ nav {
         li {
             display: inline-block;        
             padding: 0 20px;
+            padding-top: 30px;
         }
     }
 
@@ -18,11 +21,24 @@ nav {
         padding: 1em;
         background: white;
         position: absolute;
-        transform: translate(-50%, 100%);
+        transform: translate(-50%, 160%);
         transition: all .2s linear;
 
         &:hover {
             opacity: 1;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 0; 
+            height: 0; 
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid white;
+            transform: translate(-50%, -95%);
         }
     }
 }
@@ -30,5 +46,14 @@ nav {
 header {
     .hero-img {
         width: 100%;
+    }
+    
+    h1 {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 56px;
+        font-family: 'Poppins', sans-serif;
     }
 }
