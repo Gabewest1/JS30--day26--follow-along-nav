@@ -1,20 +1,57 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "reset.css"
+import "./css/App.css"
 
 class App extends Component {
+  state = {
+    center: -1,
+    isActive: false
+  }
+
   render() {
+    const DetailsComponent = (<p>Hello World!</p>)
+    const detailsStyle = {
+      left: this.state.center,
+      opacity: this.state.isActive ? 1 : 0
+    }
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+      <div>
+        <nav>
+          <ul 
+            onMouseOver={ () => this.setState({ isActive: true }) }
+            onMouseOut={ () => this.setState({ isActive: false }) }
+          >
+            <li onMouseOver={ this.getCenterOfElement }>Gear</li>
+            <li onMouseOver={ this.getCenterOfElement }>Contests</li>
+            <li onMouseOver={ this.getCenterOfElement }>words</li>
+            <li onMouseOver={ this.getCenterOfElement }>lit</li>
+          </ul>
+
+          <div 
+            className="details" 
+            style={ detailsStyle }
+            onMouseOver={ () => this.setState({ isActive: true }) }
+            onMouseOut={ () => this.setState({ isActive: false }) }
+          >
+            { DetailsComponent }
+          </div>
+        </nav>
+
+        <header>
+          <img className="hero-img" src="/hero.jpg" alt="hero image"/>
+          <h1>Ride the Wave</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
       </div>
     );
+  }
+
+  getCenterOfElement = ({ target }) => {
+    const position = target.getBoundingClientRect()
+
+    const center = position.left + (position.width / 2)
+
+    this.setState({ center })
   }
 }
 
