@@ -6,8 +6,10 @@
     "react-scripts": "1.1.4"
   },
   "dependencies": {
+    "normalize.css": "^8.0.0",
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "reset.css": "^2.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
