@@ -1,7 +1,7 @@
 import React from "react"
 
 export default props => (
-    <div { ...props } className="contest-details">
+    <div { ...props } className="details contest-details">
         <p>
             or 2017/2018 Season – There will be a 6 event minimum to qualify for West Coast Championships. Season Championships Titles will go to top 6 regular season event scores plus the West Coast Championship.
         </p>

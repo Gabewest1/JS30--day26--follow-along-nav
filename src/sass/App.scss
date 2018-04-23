@@ -6,38 +6,61 @@ nav {
     font-family: 'Open Sans', sans-serif;
     
     ul {
-        display: inline-block;
+        display: flex;
         font-size: 24px;
         
         li {
-            display: inline-block;        
+            position: relative;
             padding: 30px 40px;
+            display: flex;
+            justify-content: center;
+
+            p {
+                margin-bottom: 10px;
+                cursor: pointer;
+            }
+            .details {
+                color: black;
+                padding: 1em;
+                box-sizing: border-box;
+                position: absolute;
+                min-width: 300px;
+                opacity: 0;
+                transition: all 1s ease-in-out;
+                display: none;
+                z-index: 2;
+                top: 80px;
+                font-size: 16px;
+                line-height: 1.4em;
+            }
+
+            &.active .details {
+                display: block;
+            }
+    
+            &.active-2 .details {
+                opacity: 1;
+            }
         }
     }
 
-    .details {
+
+    .nav-follower {
         color: black;
         border-radius: 5px;
-        padding: 1em;
         background: white;
         position: absolute;
         top: 79px;
-        transform: translate(-50%);
         transition: all .2s linear;
         max-width: 300px;
-        display: none;
         opacity: 0;
         z-index: 1;
 
         &.active {
-            display: block;
-        }
-
-        &.active-2 {
             opacity: 1;
         }
 
-        &:after {
+        &:before {
             content: "";
             position: absolute;
             left: 50%;
@@ -48,6 +71,7 @@ nav {
             border-right: 12px solid transparent;
             border-bottom: 12px solid white;
             transform: translate(-50%, -95%);
+            pointer-events: none;
         }
     }
 }

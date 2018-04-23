@@ -9,61 +9,54 @@ import ReviewDetails from "./components/ReviewDetails"
 
 class App extends Component {
   state = {
-    fadeInDetails: false,
-    activeIndex: -1,
-    isHoveringListItem: false,
-    isHoveringDetails: false,
-    center: -1
+    active2: false,
+    activeTabIndex: -1,
+    navItemFollowerStyles: {},
   }
 
   render() {
-    const { center, isHoveringListItem, isHoveringDetails, activeIndex, fadeInDetails } = this.state
-    const showDetails = isHoveringListItem || isHoveringDetails
-
-    const DetailsComponent = this._detailsFactory(activeIndex)
-    const detailsStyle = { left: center }
-    const detailsClass = `
-      details 
-      ${ showDetails && "active" } 
-      ${ fadeInDetails && "active-2" }
-    `
-    console.log(detailsClass)
-    if (showDetails && !fadeInDetails) {
-      setTimeout(() => this.setState({ fadeInDetails: true }), 100)
-    } else if (!showDetails && fadeInDetails) {
-      setTimeout(() => this.setState({ fadeInDetails: false }), 100)      
-    }
+    const { navItemFollowerStyles } = this.state
 
     return (
       <div>
         <nav>
           <ul>
             <li
-              onMouseOver={ this._handleListItemHover(0) }
-              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
-            >Gear</li>
+              className={ this._getListItemClassName(0) }
+              onMouseOver={ this._createEnterHandler(0) }
+              onMouseOut={ this._handleLeave }  
+            >
+              <p>Gear</p>
+              <GearDetails />
+            </li>
             <li
-              onMouseOver={ this._handleListItemHover(1) }
-              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
-            >Contests</li>
+              className={ this._getListItemClassName(1) }
+              onMouseOver={ this._createEnterHandler(1) }
+              onMouseOut={ this._handleLeave }  
+            >
+              <p>Contests</p>
+              <ContestDetails />
+            </li>
             <li
-              onMouseOver={ this._handleListItemHover(2) }
-              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
-            >Beaches</li>
+              className={ this._getListItemClassName(2) }
+              onMouseOver={ this._createEnterHandler(2) }
+              onMouseOut={ this._handleLeave }  
+            >
+              <p>Beaches</p>
+              <BeachDetails />
+            </li>
             <li
-              onMouseOver={ this._handleListItemHover(3) }
-              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
-            >Reviews</li>
+              className={ this._getListItemClassName(3) }
+              onMouseOver={ this._createEnterHandler(3) }
+              onMouseOut={ this._handleLeave }  
+            >
+              <p>Reviews</p>
+              <ReviewDetails />
+            </li>
           </ul>
 
-          <div
-            className={ detailsClass } 
-            style={ detailsStyle }
-            onMouseOver={ () => this.setState({ isHoveringDetails: true }) }
-            onMouseOut={ () => this.setState({ isHoveringDetails: false }) }
-          >
-            <DetailsComponent />
-          </div>
+          <div className={ this._getNavFollowerClassName() } style={ navItemFollowerStyles } />
+          
         </nav>
 
         <header>
@@ -73,43 +66,56 @@ class App extends Component {
       </div>
     );
   }
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   const { center, isHoveringListItem, isHoveringDetails, activeIndex, fadeInDetails } = this.state
-  //   const showDetails = isHoveringListItem || isHoveringDetails
 
-  //   let fadeInDetails
+  _createEnterHandler = (index) => ({ currentTarget }) => {
+    let details = currentTarget.querySelector(".details")
+    
+    //1) Set the active tab, giving it a class of active.
+    //2) The active tab's details should now have a display of block instead of hidden.
+    //   We can now position the nav follower to the position of the details.
+    //3) Add another class to the active tab which will fade in the details content.
+    this.setState({ 
+      activeTabIndex: index,
+    }, () => {
+      const { top, left, width, height } = details.getBoundingClientRect()
+      this.setState({
+        navItemFollowerStyles: { top, left, width, height }    
+      }, () => {
+        this.setState({ active2: true })
+      })
+    })
 
-  //   //Ned to
-  //   if (showDetails && !fadeInDetails) {
-  //     setTimeout(() => this.setState({ fadeInDetails: true }))
-  //   }
-  // }
-  _handleListItemHover = (index) => ({ target }) => {
-    const center = this._getCenterOfElement(target)
-    this.setState({ isHoveringListItem: true, activeIndex: index, center })
   }
 
-  _getCenterOfElement = (target) => {
-    const position = target.getBoundingClientRect()
-
-    const center = position.left + (position.width / 2)
-
-    return center
+  _handleLeave = ({ currentTarget }) => {
+    this.setState({ activeTabIndex: -1, active2: false })
   }
 
-  _detailsFactory = (index) => {
-    switch (index) {
-      case 0:
-        return GearDetails
-      case 1:
-        return ContestDetails
-      case 2:
-        return BeachDetails
-      case 3:
-        return ReviewDetails
-      default: 
-        return GearDetails
+  _getListItemClassName = (index) => {
+    const { activeTabIndex, active2 } = this.state
+    let className = ""
+
+    if (activeTabIndex === index) {
+      className += "active"
     }
+
+    if (active2) {
+      className += " active-2"
+    }
+
+    return className
+  }
+
+  _getNavFollowerClassName = () => {
+    const { activeTabIndex } = this.state
+    const isHoveringTab = activeTabIndex !== -1 
+    let className = "nav-follower"
+
+    if (isHoveringTab) {
+      className += " active"
+    }
+
+    return className
   }
 }
 
