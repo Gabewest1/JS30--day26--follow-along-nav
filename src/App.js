@@ -9,7 +9,7 @@ import ReviewDetails from "./components/ReviewDetails"
 
 class App extends Component {
   state = {
-    active2: false,
+    showDetails: false,
     activeTabIndex: -1,
     navItemFollowerStyles: {},
   }
@@ -81,25 +81,25 @@ class App extends Component {
       this.setState({
         navItemFollowerStyles: { top, left, width, height }    
       }, () => {
-        this.setState({ active2: true })
+        this.setState({ showDetails: true })
       })
     })
 
   }
 
   _handleLeave = ({ currentTarget }) => {
-    this.setState({ activeTabIndex: -1, active2: false })
+    this.setState({ activeTabIndex: -1, showDetails: false })
   }
 
   _getListItemClassName = (index) => {
-    const { activeTabIndex, active2 } = this.state
+    const { activeTabIndex, showDetails } = this.state
     let className = ""
 
     if (activeTabIndex === index) {
       className += "active"
     }
 
-    if (active2) {
+    if (showDetails) {
       className += " active-2"
     }
 
