@@ -9,38 +9,60 @@ import ReviewDetails from "./components/ReviewDetails"
 
 class App extends Component {
   state = {
-    other: false,
+    fadeInDetails: false,
     activeIndex: -1,
-    isActive: false,
+    isHoveringListItem: false,
+    isHoveringDetails: false,
     center: -1
   }
 
   render() {
-    const { center, isActive, activeIndex, other } = this.state
+    const { center, isHoveringListItem, isHoveringDetails, activeIndex, fadeInDetails } = this.state
+    const showDetails = isHoveringListItem || isHoveringDetails
 
     const DetailsComponent = this._detailsFactory(activeIndex)
     const detailsStyle = { left: center }
-    const detailsClass = `details ${ isActive && "active" } ${ other && "active-2" }`
-
-    if (isActive && !other) {
-      setTimeout(() => this.setState({ other: true }))
+    const detailsClass = `
+      details 
+      ${ showDetails && "active" } 
+      ${ fadeInDetails && "active-2" }
+    `
+    console.log(detailsClass)
+    if (showDetails && !fadeInDetails) {
+      setTimeout(() => this.setState({ fadeInDetails: true }), 100)
+    } else if (!showDetails && fadeInDetails) {
+      setTimeout(() => this.setState({ fadeInDetails: false }), 100)      
     }
 
     return (
       <div>
         <nav>
           <ul>
-            <li onMouseOver={ this._handleListItemHover(0) }>Gear</li>
-            <li onMouseOver={ this._handleListItemHover(1) }>Contests</li>
-            <li onMouseOver={ this._handleListItemHover(2) }>Beaches</li>
-            <li onMouseOver={ this._handleListItemHover(3) }>Reviews</li>
+            <li
+              onMouseOver={ this._handleListItemHover(0) }
+              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
+            >Gear</li>
+            <li
+              onMouseOver={ this._handleListItemHover(1) }
+              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
+            >Contests</li>
+            <li
+              onMouseOver={ this._handleListItemHover(2) }
+              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
+            >Beaches</li>
+            <li
+              onMouseOver={ this._handleListItemHover(3) }
+              onMouseOut={ () => this.setState({ isHoveringListItem: false } )}  
+            >Reviews</li>
           </ul>
 
-          <div 
+          <div
             className={ detailsClass } 
             style={ detailsStyle }
+            onMouseOver={ () => this.setState({ isHoveringDetails: true }) }
+            onMouseOut={ () => this.setState({ isHoveringDetails: false }) }
           >
-            < DetailsComponent />
+            <DetailsComponent />
           </div>
         </nav>
 
@@ -51,11 +73,20 @@ class App extends Component {
       </div>
     );
   }
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   const { center, isHoveringListItem, isHoveringDetails, activeIndex, fadeInDetails } = this.state
+  //   const showDetails = isHoveringListItem || isHoveringDetails
 
+  //   let fadeInDetails
+
+  //   //Ned to
+  //   if (showDetails && !fadeInDetails) {
+  //     setTimeout(() => this.setState({ fadeInDetails: true }))
+  //   }
+  // }
   _handleListItemHover = (index) => ({ target }) => {
-    console.log("ay", this.state)
     const center = this._getCenterOfElement(target)
-    this.setState({ isActive: true, activeIndex: index, center })
+    this.setState({ isHoveringListItem: true, activeIndex: index, center })
   }
 
   _getCenterOfElement = (target) => {
@@ -67,7 +98,6 @@ class App extends Component {
   }
 
   _detailsFactory = (index) => {
-    console.log("AYYY")
     switch (index) {
       case 0:
         return GearDetails
